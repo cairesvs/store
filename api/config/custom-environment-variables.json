@@ -1,0 +1,12 @@
+{
+    "Postgres": {
+        "user": "PG_USER",
+        "host": "PG_HOST",
+        "db": "PG_DB",
+        "port": "PG_PORT"
+    },
+    "Elasticsearch": {
+        "host": "ES_HOST",
+        "log": "ES_LOG"
+    }
+}

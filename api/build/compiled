@@ -1,0 +1,504 @@
+(function(e, a) { for(var i in a) e[i] = a[i]; }(exports, /******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+class Product {
+    constructor(name, description, photos, price, discount, category) {
+        this.name = name;
+        this.description = description;
+        this.photos = photos;
+        this.price = price;
+        this.discount = discount;
+        this.category = category;
+    }
+    getID() {
+        return this.id;
+    }
+    setID(id) {
+        this.id = id;
+    }
+}
+exports.Product = Product;
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports) {
+
+module.exports = require("express");
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const pg = __webpack_require__(10);
+const config = __webpack_require__(3);
+class Database {
+    static create() {
+        const options = {
+            user: config.get('Postgres.user'),
+            host: config.get('Postgres.host'),
+            database: config.get('Postgres.db'),
+            port: config.get('Postgres.port')
+        };
+        if (!this.pool) {
+            this.pool = new pg.Pool(options);
+        }
+    }
+    static getConnection() {
+        if (!this.pool) {
+            Database.create();
+        }
+        return this.pool;
+    }
+}
+exports.Database = Database;
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports) {
+
+module.exports = require("config");
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const elasticsearch = __webpack_require__(12);
+const config = __webpack_require__(3);
+class Search {
+    static create() {
+        if (!this.client) {
+            this.client = new elasticsearch.Client({
+                host: config.get('Elasticsearch.host'),
+                log: config.get('Elasticsearch.log')
+            });
+        }
+    }
+    static getConnection() {
+        if (!this.client) {
+            Search.create();
+        }
+        return this.client;
+    }
+}
+exports.Search = Search;
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const app = __webpack_require__(6);
+const http = __webpack_require__(16);
+let PORT = process.env.PORT || '3000';
+function getPort(val) {
+    const port = parseInt(val, 10);
+    if (isNaN(port)) {
+        return val;
+    }
+    if (port >= 0) {
+        return port;
+    }
+    return false;
+}
+app.set('port', PORT);
+const server = http.createServer(app);
+server.listen(PORT);
+server.on('error', (error) => {
+    console.log("Caught an error", error.stack);
+    throw error;
+});
+server.on('listening', () => {
+    const addr = server.address();
+    const bind = (typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`);
+    (`Listening on ${bind}`);
+});
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+const express = __webpack_require__(1);
+const routes = __webpack_require__(7);
+const winston = __webpack_require__(14);
+const database_1 = __webpack_require__(2);
+const search_1 = __webpack_require__(4);
+const expressWinston = __webpack_require__(15);
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded());
+app.use(expressWinston.logger({
+    transports: [
+        new winston.transports.Console({
+            json: true,
+            colorize: true
+        })
+    ],
+    meta: true,
+    msg: "HTTP {{req.method}} {{req.url}}",
+    expressFormat: true,
+    colorize: false,
+    ignoreRoute: function (req, res) { return false; }
+}));
+app.use('/', routes);
+if (app.get('env') === 'development') {
+    app.use((err, req, res, next) => {
+        res.status(err.status || 500);
+        res.render('error', {
+            message: err.message,
+            error: err
+        });
+    });
+}
+app.use(function (err, req, res, next) {
+    res.status(err.status || 500);
+    res.render('error', {
+        message: err.message,
+        error: {}
+    });
+});
+database_1.Database.create();
+search_1.Search.create();
+module.exports = app;
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+const express = __webpack_require__(1);
+const model_1 = __webpack_require__(0);
+const service_1 = __webpack_require__(8);
+const repository_1 = __webpack_require__(9);
+const search_1 = __webpack_require__(11);
+const router = express.Router();
+const productRepository = new repository_1.ProductRespository();
+const productSearch = new search_1.ProductSearch();
+const productService = new service_1.ProductService(productRepository, productSearch);
+router.get('/products', (req, res) => {
+    const id = req.query.id;
+    productRepository.get(id)
+        .then((product) => res.json(product))
+        .catch((reason) => res.json({
+        error: `Error fetching id ${id} caused by: ${reason}`
+    }));
+});
+router.post('/products', (req, res) => {
+    const product = new model_1.Product(req.body.name, req.body.description, req.body.photos, req.body.price, req.body.discount, req.body.category);
+    productService.add(product)
+        .then((result) => res.json({
+        inserted: true,
+    }))
+        .catch((reason) => res.json({
+        inserted: false,
+        error: `Error inserting product caused by ${reason}`
+    }));
+});
+router.get('/products/search', (req, res) => {
+    const text = req.query.q;
+    const size = req.query.size || 16;
+    const page = req.query.page || 1;
+    productSearch.search(text, size, page)
+        .then((result) => res.json({
+        results: result
+    }))
+        .catch((reason) => res.json({
+        error: `Error searching for products with text ${text} caused by ${reason}`
+    }));
+});
+module.exports = router;
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+class ProductService {
+    constructor(repository, search) {
+        this.repository = repository;
+        this.search = search;
+    }
+    add(product) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let promise;
+            try {
+                yield this.repository.add(product);
+                yield this.search.index(product);
+                promise = Promise.resolve(true);
+            }
+            catch (err) {
+                promise = Promise.reject(err);
+            }
+            return promise;
+        });
+    }
+}
+exports.ProductService = ProductService;
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const model_1 = __webpack_require__(0);
+const database_1 = __webpack_require__(2);
+class ProductRespository {
+    add(product) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let promise;
+            try {
+                const client = yield database_1.Database.getConnection().connect();
+                const result = yield client.query('INSERT INTO products(name, description, photos, price, discount, category) VALUES($1,$2,$3,$4,$5,$6) RETURNING id', [product.name, product.description, product.photos, product.price, product.discount, product.category]);
+                client.release();
+                product.setID(result.rows[0].id);
+                promise = Promise.resolve(true);
+            }
+            catch (err) {
+                promise = Promise.reject(`Problem executing the query ${err}`);
+            }
+            return promise;
+        });
+    }
+    get(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let promise;
+            try {
+                const client = yield database_1.Database.getConnection().connect();
+                const result = yield client.query('SELECT * FROM products where id = $1', [id]);
+                client.release();
+                const pr = result.rows[0];
+                if (pr) {
+                    promise = Promise.resolve(new model_1.Product(pr.name, pr.description, pr.photos, pr.price, pr.discount, pr.category));
+                }
+                else {
+                    promise = Promise.reject(`Couldn't find product with id ${id}`);
+                }
+            }
+            catch (err) {
+                promise = Promise.reject(`Problem executing the query ${err}`);
+            }
+            return promise;
+        });
+    }
+}
+exports.ProductRespository = ProductRespository;
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports) {
+
+module.exports = require("pg");
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const model_1 = __webpack_require__(0);
+const search_1 = __webpack_require__(4);
+const index_1 = __webpack_require__(13);
+class ProductSearch {
+    search(text, size, page) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const connection = search_1.Search.getConnection();
+            let promise;
+            try {
+                const body = yield connection.search({
+                    size: size,
+                    from: page === 1 ? 0 : size * page,
+                    q: text
+                });
+                const hits = body.hits.hits;
+                const products = hits.map(h => {
+                    const product = new model_1.Product(h._source.name, h._source.description, h._source.photos, h._source.price, h._source.discount, h._source.category);
+                    product.setID(parseInt(h._id, 10));
+                    return product;
+                });
+                promise = Promise.resolve(products);
+            }
+            catch (err) {
+                promise = Promise.reject(`Error occurred when searching for ${text} caused by ${err}`);
+            }
+            return promise;
+        });
+    }
+    index(product) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const connection = search_1.Search.getConnection();
+            const indexable = new index_1.ProductIndexable('products', 'products', "" + product.getID(), product);
+            let promise;
+            try {
+                yield connection.index(indexable);
+                promise = Promise.resolve(true);
+            }
+            catch (err) {
+                promise = Promise.reject(`Error occurred when indexing product id ${product.getID()} caused by ${err}`);
+            }
+            return promise;
+        });
+    }
+}
+exports.ProductSearch = ProductSearch;
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports) {
+
+module.exports = require("elasticsearch");
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+class ProductIndexable {
+    constructor(index, type, id, body) {
+        this.index = index;
+        this.type = type;
+        this.id = id;
+        this.body = body;
+    }
+}
+exports.ProductIndexable = ProductIndexable;
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports) {
+
+module.exports = require("winston");
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports) {
+
+module.exports = require("express-winston");
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports) {
+
+module.exports = require("http");
+
+/***/ })
+/******/ ])));

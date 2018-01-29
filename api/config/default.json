@@ -1,0 +1,12 @@
+{
+    "Postgres": {
+        "user": "postgres",
+        "host": "127.0.0.1",
+        "db": "postgres",
+        "port": "5433"
+    },
+    "Elasticsearch": {
+        "host": "127.0.0.1:9201",
+        "log": "trace"
+    }
+}
