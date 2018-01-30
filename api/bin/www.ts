@@ -32,14 +32,14 @@ app.set('port', PORT);
  * Create HTTP server.
  */
 const server = http.createServer(app);
-Logger.info('Server is up on %d', PORT);
+Logger.info(`Server is up on ${PORT}`);
 /**
  * Listen on provided port, on all network interfaces.
  */
 server.listen(PORT);
 
 server.on('error', (error: Error) => {
-    Logger.error("Caught an error", error.stack);
+    Logger.error(`Caught an error ${error.stack}`);
     throw error;
 });
 

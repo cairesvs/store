@@ -10,10 +10,14 @@ export class LoggerInfo {
 
 export class Logger {
     static logger: winston.LoggerInstance;
-    static loggerInfo: LoggerInfo
+    static defaultFields: {};
     static create(loggerInfo: LoggerInfo) {
         this.logger = new winston.Logger();
-        this.loggerInfo = loggerInfo;
+        this.defaultFields = {
+            version: loggerInfo.version,
+            app: loggerInfo.app,
+            env: loggerInfo.env
+        };
         const transport = new winston.transports.Console({
             json: true,
             stringify: (obj) => JSON.stringify(obj)
@@ -24,19 +28,19 @@ export class Logger {
         });
     }
 
-    static info(format: string, ...params: any[]) {
-        this.logger.log('info', format, params);
+    static info(message: string) {
+        this.logger.log('info', message, this.defaultFields);
     }
 
-    static debug(format: string, ...params: any[]) {
-        this.logger.debug('debug', format, params);
+    static debug(message: string) {
+        this.logger.debug('debug', message, this.defaultFields);
     }
 
-    static error(format: string, ...params: any[]) {
-        this.logger.log('error', format, params);
+    static error(message: string) {
+        this.logger.log('error', message, this.defaultFields);
     }
 
-    static warn(format: string, ...params: any[]) {
-        this.logger.log('warn', format, params);
+    static warn(message: string) {
+        this.logger.log('warn', message, this.defaultFields);
     }
 }

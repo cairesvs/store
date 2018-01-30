@@ -16,6 +16,8 @@ services:
       - PG_HOST=db
       - PG_DB=postgres
       - PG_PORT=5432
+      - API_NAME=mmartan-api
+      - API_VERSION=stage
     ports:
       - "3001:3000"
     depends_on:
