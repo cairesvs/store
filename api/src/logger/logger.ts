@@ -10,20 +10,33 @@ export class LoggerInfo {
 
 export class Logger {
     static logger: winston.LoggerInstance;
+    static loggerInfo: LoggerInfo
     static create(loggerInfo: LoggerInfo) {
         this.logger = new winston.Logger();
+        this.loggerInfo = loggerInfo;
         const transport = new winston.transports.Console({
             json: true,
+            stringify: (obj) => JSON.stringify(obj)
         });
         this.logger.configure({
             transports: [transport],
-            level: loggerInfo.getLevel(),
+            level: loggerInfo.getLevel()
         });
     }
 
     static info(format: string, ...params: any[]) {
-        winston.log.apply(this, ['debug', 'carlos - ' + format].concat(params));
+        this.logger.log('info', format, params);
     }
 
+    static debug(format: string, ...params: any[]) {
+        this.logger.debug('debug', format, params);
+    }
 
+    static error(format: string, ...params: any[]) {
+        this.logger.log('error', format, params);
+    }
+
+    static warn(format: string, ...params: any[]) {
+        this.logger.log('warn', format, params);
+    }
 }

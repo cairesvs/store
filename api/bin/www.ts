@@ -4,6 +4,7 @@
 import * as app from '../src/index';
 import * as http from 'http';
 import * as debug from 'debug';
+import { Logger } from '../src/logger/logger';
 
 /**
  * Get port from environment and store in Express.
@@ -31,14 +32,14 @@ app.set('port', PORT);
  * Create HTTP server.
  */
 const server = http.createServer(app);
-
+Logger.info('Server is up on %d', PORT);
 /**
  * Listen on provided port, on all network interfaces.
  */
 server.listen(PORT);
 
 server.on('error', (error: Error) => {
-    console.log("Caught an error", error.stack);
+    Logger.error("Caught an error", error.stack);
     throw error;
 });
 
