@@ -4,17 +4,11 @@ services:
     image: postgres
     volumes:
       - ./sql:/docker-entrypoint-initdb.d/
-  es:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.1.2
-    ports:
-      - "9200:9200"
-      - "9300:9300"
   wait:
     image: dadarek/wait-for-dependencies
     depends_on:
       - db
-      - es
-    command: db:5432 es:9200
+    command: db:5432
   api:
     image: caires/mmartan:v1.0.0
     environment:
@@ -22,8 +16,6 @@ services:
       - PG_HOST=db
       - PG_DB=postgres
       - PG_PORT=5432
-      - ES_HOST=es:9200
-      - ES_LOG=trace
     ports:
       - "3001:3000"
     depends_on:

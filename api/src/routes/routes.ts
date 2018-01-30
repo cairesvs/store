@@ -1,12 +1,10 @@
 import * as express from 'express';
 import { Product } from '../products/model';
-import { ProductService } from '../products/service';
 import { ProductRespository } from '../products/repository';
-import { ProductSearch } from '../products/search';
+import { Logger } from '../logger/logger';
+
 const router = express.Router();
 const productRepository = new ProductRespository();
-const productSearch = new ProductSearch();
-const productService = new ProductService(productRepository, productSearch);
 
 router.get('/products', (req: express.Request, res: express.Response) => {
     const id = req.query.id;
@@ -19,7 +17,7 @@ router.get('/products', (req: express.Request, res: express.Response) => {
 
 router.post('/products', (req: express.Request, res: express.Response) => {
     const product = new Product(req.body.name, req.body.description, req.body.photos, req.body.price, req.body.discount, req.body.category);
-    productService.add(product)
+    productRepository.add(product)
         .then((result) => res.json({
             inserted: true,
         }))
@@ -33,7 +31,7 @@ router.get('/products/search', (req: express.Request, res: express.Response) => 
     const text = req.query.q;
     const size = req.query.size || 16;
     const page = req.query.page || 1;
-    productSearch.search(text, size, page)
+    productRepository.search(text, size, page)
         .then((result) => res.json({
             results: result
         }))

@@ -1,28 +1,17 @@
 import * as express from 'express';
-import * as routes from './routes/routes';
 import * as winston from 'winston';
+import * as config from 'config';
+import * as routes from './routes/routes';
 import { Database } from './database/database';
-import { Search } from './database/search';
-// @see https://github.com/bithavoc/express-winston/issues/123
-const expressWinston = require('express-winston');
+import { Logger, LoggerInfo } from './logger/logger';
+
+// Create database pool connection
+Database.create();
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded());
-
-app.use(expressWinston.logger({
-    transports: [
-        new winston.transports.Console({
-            json: true,
-            colorize: true
-        })
-    ],
-    meta: true,
-    msg: "HTTP {{req.method}} {{req.url}}",
-    expressFormat: true,
-    colorize: false,
-    ignoreRoute: function (req: express.Request, res: express.Response) { return false; }
-}));
+Logger.create(new LoggerInfo(app.get('env'), config.get('Api.name'), config.get('Api.version')));
 
 app.use('/', routes);
 
@@ -43,10 +32,5 @@ app.use(function (err: any, req: express.Request, res: express.Response, next: F
         error: {}
     });
 });
-
-// Create database pool connection
-Database.create();
-// Create search client
-Search.create();
 
 export = app;

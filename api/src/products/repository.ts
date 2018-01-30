@@ -7,7 +7,11 @@ export class ProductRespository {
         let promise: Promise<boolean>;
         try {
             const client = await Database.getConnection().connect();
-            const result = await client.query('INSERT INTO products(name, description, photos, price, discount, category) VALUES($1,$2,$3,$4,$5,$6) RETURNING id',
+            const tsvector = `'${product.name}' || '. ' || '${product.description}'`;
+            const sql = `INSERT INTO products(name, description, photos, price, discount, category, document)
+                         VALUES($1,$2,$3,$4,$5,$6,to_tsvector(${tsvector})) RETURNING id`;
+            const result = await client.query(
+                sql,
                 [product.name, product.description, product.photos, product.price, product.discount, product.category]);
             client.release();
             product.setID(result.rows[0].id);
@@ -22,7 +26,7 @@ export class ProductRespository {
         let promise: Promise<Product>;
         try {
             const client = await Database.getConnection().connect();
-            const result = await client.query('SELECT * FROM products where id = $1', [id]);
+            const result = await client.query('SELECT * FROM products WHERE id = $1', [id]);
             client.release();
             const pr = result.rows[0];
             if (pr) {
@@ -30,6 +34,24 @@ export class ProductRespository {
             } else {
                 promise = Promise.reject(`Couldn't find product with id ${id}`);
             }
+        } catch (err) {
+            promise = Promise.reject(`Problem executing the query ${err}`);
+        }
+        return promise;
+    }
+
+    async search(text: string, size: number, page: number): Promise<Product[]> {
+        let promise: Promise<Product[]>;
+        try {
+            const client = await Database.getConnection().connect();
+            const result = await client.query(`SELECT * FROM products WHERE document @@ to_tsquery('${text}') LIMIT $1 OFFSET $2`, [size, page === 1 ? 0 : size * page]);
+            client.release();
+            const products = result.rows.map(p => {
+                const product = new Product(p.name, p.description, p.photos, p.price, p.discount, p.category);
+                product.setID(p.id);
+                return product;
+            });
+            promise = Promise.resolve(products);
         } catch (err) {
             promise = Promise.reject(`Problem executing the query ${err}`);
         }
