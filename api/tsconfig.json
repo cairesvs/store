@@ -9,7 +9,10 @@
     "outDir": "target",
     "target": "es6",
     "module": "commonjs",
-    "lib": ["es6", "dom"],
+    "lib": [
+      "es6",
+      "dom"
+    ],
     "strictNullChecks": true,
     "removeComments": true,
     "moduleResolution": "node",
@@ -20,8 +23,6 @@
     "noImplicitReturns": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "jsx": "react",
-    "jsxFactory": "h"
   },
   "exclude": [
     "node_modules",

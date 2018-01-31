@@ -3,8 +3,8 @@ import * as winston from 'winston';
 export class LoggerInfo {
     constructor(readonly env: string, readonly app: string, readonly version: string) { }
     getLevel(): string {
-        if (this.env === "development") return "debug";
-        return "error";
+        if (this.env === 'development') return 'debug';
+        return 'error';
     }
 }
 

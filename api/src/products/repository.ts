@@ -1,6 +1,6 @@
-import { Product } from "./model";
-import { Database } from "../database/database";
-import { QueryResult } from "pg";
+import { Product } from './model';
+import { Database } from '../database/database';
+import { QueryResult } from 'pg';
 
 export class ProductRespository {
     async add(product: Product): Promise<boolean> {
@@ -14,7 +14,6 @@ export class ProductRespository {
                 sql,
                 [product.name, product.description, product.photos, product.price, product.discount, product.category]);
             client.release();
-            product.setID(result.rows[0].id);
             promise = Promise.resolve(true);
         } catch (err) {
             promise = Promise.reject(`Problem executing the query ${err}`);
@@ -47,8 +46,7 @@ export class ProductRespository {
             const result = await client.query(`SELECT * FROM products WHERE document @@ to_tsquery('${text}') LIMIT $1 OFFSET $2`, [size, page === 1 ? 0 : size * page]);
             client.release();
             const products = result.rows.map(p => {
-                const product = new Product(p.name, p.description, p.photos, p.price, p.discount, p.category);
-                product.setID(p.id);
+                const product = new Product(p.name, p.description, p.photos, p.price, p.discount, p.category, p.id);
                 return product;
             });
             promise = Promise.resolve(products);

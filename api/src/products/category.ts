@@ -1,5 +1,5 @@
 export enum ProductCategory {
-    SHEETS = "Lençol",
-    BED = "Cama",
-    COUCH = "Sofá"
+    SHEETS = 'Lençol',
+    BED = 'Cama',
+    COUCH = 'Sofá'
 }
