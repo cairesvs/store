@@ -1,5 +1,4 @@
 import * as React from 'react';
-import './Products.css';
 import { Product } from '../../products/model';
 import { ProductsItem } from './ProductsItem';
 

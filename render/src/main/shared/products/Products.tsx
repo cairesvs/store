@@ -4,8 +4,9 @@ import * as fetch from 'isomorphic-fetch';
 import { Product } from '../../products/model';
 import { ProductsList, ProductsListProps } from './ProductsList';
 import { RouteComponentProps, Link } from 'react-router-dom';
-const logo = require('./logo.svg') as string;
-const search = require('./search.svg') as string;
+import { Header } from './Header';
+import { Typed } from './Typed';
+import { Page } from './Page';
 
 declare let BACKEND_HOST: string;
 const host = BACKEND_HOST;
@@ -97,37 +98,11 @@ export class Products extends React.Component<ProductsProps, ProductsProps> {
     const pages = [...Array(maxPage).keys()].map((n) => n + 1);
     return (
       <div className='products'>
-        <header className='default-header'>
-          <img src={logo} />
-          <div className='search-container'>
-            <form onSubmit={this.submit}>
-              <input type='search' className='search' placeholder='Buscar produtos...' onChange={this.changeTerm} />
-            </form>
-          </div>
-        </header>
-        {
-          <div className='typed'>
-            <span>{this.state.term}</span>
-          </div>}
-        {<ProductsList total={total} products={products} />}
-        <div className='products-page'>
-          <div className='products-page-size'>
-            <select onChange={this.changePageSize}>
-              <option value='16'>16 produtos por página</option>
-              <option value='30'>30 produtos por página</option>
-              <option value='50'>50 produtos por página</option>
-            </select>
-          </div>
-          <div className='products-page-number'>
-            {pages &&
-              pages.map((page, i) =>
-                <Link
-                  key={i}
-                  onClick={this.changePage(page)}
-                  to={`/?q=${this.state.term}&size=${this.state.pageSize}&page=${page}`}>{page}</Link>
-              )}
-          </div>
-        </div>
+        <Header submitFn={this.submit} changeTermFn={this.changeTerm} />
+        <Typed term={this.state.term} />
+        <ProductsList total={total} products={products} />
+        <Page changePageSizeFn={this.changePageSize} changePageFn={this.changePage}
+          pages={pages} term={this.state.term} pageSize={this.state.pageSize} />
       </div>
     );
   }
