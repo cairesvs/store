@@ -4,7 +4,8 @@
   "description": "",
   "main": "webpack-dev.config.js",
   "scripts": {
-    "start": "webpack --config webpack.config.js && node build/compiled",
+    "build:prod": "webpack --config webpack.config.docker.js",
+    "start": "node build/compiled",
     "client:watch": "webpack -w --config webpack.config.js",
     "server:watch": "TZ='UTC' onchange 'build/compiled' -i -- node build/compiled",
     "test": "jest"

@@ -19,7 +19,7 @@ router.post('/products', (req: express.Request, res: express.Response) => {
     const product = new Product(req.body.name, req.body.description, req.body.photos, req.body.price, req.body.discount, req.body.category);
     productRepository.add(product)
         .then((result) => res.json({
-            inserted: true,
+            inserted: result && result.id && result.id > 0,
         }))
         .catch((reason) => res.json({
             inserted: false,

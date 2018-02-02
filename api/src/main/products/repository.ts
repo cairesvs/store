@@ -3,12 +3,12 @@ import { Database } from '../database/database';
 import { QueryResult } from 'pg';
 
 export class ProductSearchResponse {
-    constructor(readonly results: Product[], readonly total: number) { }
+    constructor(readonly results: Product[], readonly total: { count: number }) { }
 }
 
 export class ProductRespository {
-    async add(product: Product): Promise<boolean> {
-        let promise: Promise<boolean>;
+    async add(product: Product): Promise<Product> {
+        let promise: Promise<Product>;
         try {
             const client = await Database.getConnection().connect();
             const tsvector = `'${product.name}' || '. ' || '${product.description}'`;
@@ -18,7 +18,8 @@ export class ProductRespository {
                 sql,
                 [product.name, product.description, product.photos, product.price, product.discount, product.category]);
             client.release();
-            promise = Promise.resolve(true);
+            const productWithID = new Product(product.name, product.description, product.photos, product.price, product.discount, product.category, result.rows[0].id);
+            promise = Promise.resolve(productWithID);
         } catch (err) {
             promise = Promise.reject(`Problem executing the query ${err}`);
         }
@@ -33,7 +34,7 @@ export class ProductRespository {
             client.release();
             const pr = result.rows[0];
             if (pr) {
-                promise = Promise.resolve(new Product(pr.name, pr.description, pr.photos, pr.price, pr.discount, pr.category));
+                promise = Promise.resolve(new Product(pr.name, pr.description, pr.photos, pr.price, pr.discount, pr.category, pr.id));
             } else {
                 promise = Promise.reject(`Couldn't find product with id ${id}`);
             }

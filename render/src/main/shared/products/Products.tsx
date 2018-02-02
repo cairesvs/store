@@ -28,17 +28,18 @@ export class Products extends React.Component<ProductsProps, ProductsProps> {
     let pageSize: number = 16;
     let page: number = 1;
     if (props.staticContext) {
-      data = props.staticContext.results.results || [];
-      total = props.staticContext.results.total.count || 0;
+      const sc = props.staticContext;
+      data = !sc.results.error && sc.results.results || [];
+      total = !sc.results.error && sc.results.total.count || 0;
       term = props.staticContext.term || '';
       pageSize = props.staticContext.pageSize || 16;
       page = props.staticContext.page || 1;
     } else {
-      data = (window as any).__data__.results;
-      total = (window as any).__data__.total.count;
-      delete (window as any).__data__;
-      term = (window as any).__term__;
-      delete (window as any).__term__;
+      const dataWindow = (window as any).__data__;
+      const termWindow = (window as any).__term__;
+      data = !dataWindow.error && dataWindow.results || [];
+      total = !dataWindow.error && dataWindow.total.count || 0;
+      term = termWindow || '';
     }
 
     this.state = {
@@ -61,7 +62,8 @@ export class Products extends React.Component<ProductsProps, ProductsProps> {
       event.preventDefault();
       Products.getInitialData(this.state.term, this.state.pageSize, page)
         .then(data => {
-          this.setState({ data: data.results, total: data.total.count, page: page });
+          if (!data.error)
+            this.setState({ data: data.results, total: data.total.count, page: page });
         })
         .catch(error => console.log(error));
     };
@@ -72,7 +74,8 @@ export class Products extends React.Component<ProductsProps, ProductsProps> {
     this.props.history.push(`?q=${this.state.term}&size=${pageSize}&page=${this.state.page}`);
     Products.getInitialData(this.state.term, pageSize, this.state.page)
       .then(data => {
-        this.setState({ data: data.results, total: data.total.count, pageSize: pageSize });
+        if (!data.error)
+          this.setState({ data: data.results, total: data.total.count, pageSize: pageSize });
       })
       .catch(error => console.log(error));
   }
@@ -86,7 +89,8 @@ export class Products extends React.Component<ProductsProps, ProductsProps> {
     this.props.history.push(`?q=${this.state.term}&size=${this.state.pageSize}&page=${this.state.page}`);
     Products.getInitialData(this.state.term, this.state.pageSize, this.state.page)
       .then(data => {
-        this.setState({ data: data.results, total: data.total.count });
+        if (!data.error)
+          this.setState({ data: data.results, total: data.total.count });
       })
       .catch(error => console.log(error));
   }

@@ -1,0 +1,12 @@
+{
+    "Api": {
+        "name": "store-api",
+        "version": "test"
+    },
+    "Postgres": {
+        "user": "postgres",
+        "host": "127.0.0.1",
+        "db": "postgres",
+        "port": "5444"
+    }
+}
