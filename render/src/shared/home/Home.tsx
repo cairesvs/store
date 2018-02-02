@@ -3,7 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { RouteComponentProps } from 'react-router';
 import * as fetch from 'isomorphic-fetch';
 import './Home.css';
-import { ProductsListProperties, ProductsList } from '../products/ProductsList';
+import { ProductsList } from '../products/ProductsList';
 import { Product } from '../../products/model';
 
 export interface HomeProps extends RouteComponentProps<HomeProps> { }
@@ -50,7 +50,6 @@ class Home extends React.Component<HomeProps, { products: Product[], term: strin
             </form>
           </div>
         </header>
-        {this.state.products.length > 0 && <ProductsList products={this.state.products} />}
       </div>
     );
   }

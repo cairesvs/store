@@ -5,10 +5,6 @@ const routes = [
     {
         path: '/',
         exact: true,
-        component: Home
-    },
-    {
-        path: '/products',
         component: Products
     }
 ];

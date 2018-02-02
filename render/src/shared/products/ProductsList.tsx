@@ -1,9 +1,9 @@
 import * as React from 'react';
 import './Products.css';
 import { Product } from '../../products/model';
-import './Products.css';
+import { ProductsItem } from './ProductsItem';
 
-export interface ProductsListProps { products: Product[]; }
+export interface ProductsListProps { total: number; products: Product[]; }
 
 export class ProductsList extends React.Component<ProductsListProps, {}> {
     render() {
@@ -13,17 +13,13 @@ export class ProductsList extends React.Component<ProductsListProps, {}> {
             <div className='productslist'>
                 <div className='header'>
                     <div className='header-title'>
-                        <strong>Store</strong>
+                        <strong>{this.props.total} produtos encontrados</strong>
                     </div>
                 </div>
 
                 {products &&
-                    products.map(product =>
-                        <div key={product.id} className='products-item'>
-                            <p>
-                                <span className='products-position'>{product.id}</span> {product.name}{' '}
-                            </p>
-                        </div>
+                    products.map((product, i) =>
+                        <ProductsItem key={i} product={product} />
                     )}
             </div>
         );

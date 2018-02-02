@@ -1,5 +1,24 @@
 .productslist {
-  background-color: #f6f6ef;
+  margin: 50px auto;
+  width: 1024px;
+}
+
+.products-page {
+  margin: 50px auto;
+  width: 1024px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.products-page select {
+  width: 200px;
+}
+
+.products-page-number a {
+  padding: 5px;
+  text-decoration: none;
+  color: black;
+  margin: 10px;
 }
 
 .productslist small {
@@ -7,10 +26,11 @@
 }
 
 .header {
-  background-color: #6b32e1;
-  color: #fff;
+  color: #666666;
   padding: 3px;
   height: 28px;
+  border-bottom: 2px solid #dfbe7f;
+  margin-bottom: 40px;
 }
 
 .header-title {
@@ -56,3 +76,87 @@
   margin-left: 40px;
   margin-top: -12px;
 }
+
+.products {
+    font-family: "Avenir Light", Helvetica, Arial, sans-serif;
+  }
+  
+  .products::after {
+    display: block;
+    content: "";
+    clear: both;
+  }
+  
+  .selected {
+    font-weight: bold;
+  }
+  
+  header {
+    background-color: #ecebf0;
+    padding: 20px;
+    display: flex;
+    border-bottom: 1px solid lightgray;
+  }
+
+  .search-container {
+    margin-left: auto;
+  }
+
+  .search-container form {
+    width: 400px;
+  }
+  
+  .search {
+    padding:6px 15px 6px 30px;
+    margin:3px;
+    background-image: url(/media/search.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    border-radius:15px; 
+    width: 100%;
+  }
+
+  .typed {
+    background-color: #ecebf0;
+    color: #433e66;
+    font-size: 2em;
+    padding: 40px 20px;
+    border-bottom: 1px solid lightgray;
+  }
+  
+  aside {
+    display: block;
+    position: absolute;
+    text-align: right;
+    width: 8%;
+    margin-left: -6%;
+    color: #999;
+  }
+  
+  article {
+    float: left;
+    padding: 0 0 0 52px;
+    width: 35%;
+  }
+  
+  figure {
+    float: right;
+    width: 48.5%;
+  }
+
+  .products-info {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .products-info-detail {
+    width: 50%;
+  }
+
+  .products-info-price {
+    width: 20%;
+  }
+
+  .product-has-discount {
+    text-decoration: line-through;
+  }

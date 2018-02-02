@@ -5,7 +5,8 @@
   "main": "webpack-dev.config.js",
   "scripts": {
     "start": "webpack --config webpack.config.js && node build/compiled",
-    "start:dev": "TZ='UTC' onchange 'src/**/*.ts*' -i -- npm start"
+    "client:watch": "webpack -w --config webpack.config.js",
+    "server:watch": "TZ='UTC' onchange 'build/compiled' -i -- node build/compiled"
   },
   "author": "",
   "license": "ISC",
