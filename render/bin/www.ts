@@ -1,7 +1,7 @@
 /**
  * Module dependencies.
  */
-import * as app from '../src/server/index';
+import * as app from '../src/main/server/index';
 import * as http from 'http';
 import * as debug from 'debug';
 

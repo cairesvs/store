@@ -1,10 +1,10 @@
 /**
  * Module dependencies.
  */
-import * as app from '../src/index';
+import * as app from '../src/main/index';
 import * as http from 'http';
 import * as debug from 'debug';
-import { Logger } from '../src/logger/logger';
+import { Logger } from '../src/main/logger/logger';
 
 /**
  * Get port from environment and store in Express.

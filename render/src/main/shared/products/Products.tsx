@@ -27,11 +27,11 @@ export class Products extends React.Component<ProductsProps, ProductsProps> {
     let pageSize: number = 16;
     let page: number = 1;
     if (props.staticContext) {
-      data = props.staticContext.results.results;
-      total = props.staticContext.results.total.count;
-      term = props.staticContext.term;
-      pageSize = props.staticContext.pageSize;
-      page = props.staticContext.page;
+      data = props.staticContext.results.results || [];
+      total = props.staticContext.results.total.count || 0;
+      term = props.staticContext.term || '';
+      pageSize = props.staticContext.pageSize || 16;
+      page = props.staticContext.page || 1;
     } else {
       data = (window as any).__data__.results;
       total = (window as any).__data__.total.count;

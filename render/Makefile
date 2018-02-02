@@ -14,9 +14,6 @@ postgres/connect:
 dependencies:
 	npm install
 
-run:
-	npm run build && npm start
-
 docker/build:
 	docker build -t caires/mmartan:${DOCKER_IMAGE_VERSION} .
 

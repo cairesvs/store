@@ -5,7 +5,7 @@
   "main": "webpack-dev.config.js",
   "scripts": {
     "build": "node node_modules/webpack/bin/webpack.js --config webpack.config.js",
-    "start": "node build/compiled"
+    "start": "node node_modules/webpack/bin/webpack.js --config webpack.config.js && node build/compiled"
   },
   "author": "",
   "license": "ISC",

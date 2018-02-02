@@ -2,13 +2,30 @@ import * as express from 'express';
 import * as winston from 'winston';
 import * as config from 'config';
 import * as routes from './routes/routes';
+import { Database } from './database/database';
+import { Logger, LoggerInfo } from './logger/logger';
+
+// Create database pool connection
+Database.create();
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded());
-app.use(express.static('public'));
+Logger.create(new LoggerInfo(app.get('env'), config.get('Api.name'), config.get('Api.version')));
 
-app.use('*', routes);
+app.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+});
+
+app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
+    Logger.debug(`Request for ${req.url} with params ${JSON.stringify(req.query)}`);
+    next();
+});
+
+app.use('/', routes);
+
 
 if (app.get('env') === 'development') {
     app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -22,7 +39,7 @@ if (app.get('env') === 'development') {
 
 app.use(function (err: any, req: express.Request, res: express.Response, next: Function) {
     res.status(err.status || 500);
-    res.json({
+    res.render('error', {
         message: err.message,
         error: {}
     });

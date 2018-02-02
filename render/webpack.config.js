@@ -8,7 +8,7 @@ const config = {
 }
 
 const browserConfig = {
-  entry: "./src/browser/index.tsx",
+  entry: "./src/main/browser/index.tsx",
   output: {
     path: __dirname,
     filename: "./public/bundle.js"
