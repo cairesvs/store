@@ -29,11 +29,12 @@ router.post('/products', (req: express.Request, res: express.Response) => {
 
 router.get('/products/search', (req: express.Request, res: express.Response) => {
     const text = req.query.q;
-    const size = req.query.size || 16;
-    const page = req.query.page || 1;
+    const size = parseInt(req.query.size) || 16;
+    const page = parseInt(req.query.page, 10) || 1;
     productRepository.search(text, size, page)
         .then((result) => res.json({
-            results: result
+            results: result.results,
+            total: result.total
         }))
         .catch((reason) => res.json({
             error: `Error searching for products with text ${text} caused by ${reason}`

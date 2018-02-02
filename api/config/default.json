@@ -1,6 +1,6 @@
 {
     "Api": {
-        "name": "mmartan-api",
+        "name": "store-api",
         "version": "dev"
     },
     "Postgres": {

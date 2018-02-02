@@ -2,6 +2,10 @@ import { Product } from './model';
 import { Database } from '../database/database';
 import { QueryResult } from 'pg';
 
+export class ProductSearchResponse {
+    constructor(readonly results: Product[], readonly total: number) { }
+}
+
 export class ProductRespository {
     async add(product: Product): Promise<boolean> {
         let promise: Promise<boolean>;
@@ -39,17 +43,18 @@ export class ProductRespository {
         return promise;
     }
 
-    async search(text: string, size: number, page: number): Promise<Product[]> {
-        let promise: Promise<Product[]>;
+    async search(text: string, size: number, page: number): Promise<ProductSearchResponse> {
+        let promise: Promise<ProductSearchResponse>;
         try {
             const client = await Database.getConnection().connect();
-            const result = await client.query(`SELECT * FROM products WHERE document @@ to_tsquery('${text}') LIMIT $1 OFFSET $2`, [size, page === 1 ? 0 : size * page]);
+            const resultSearch = await client.query(`SELECT * FROM products WHERE document @@ to_tsquery('${text}') LIMIT $1 OFFSET $2`, [size, page === 1 ? 0 : size * page]);
+            const resultTotal = await client.query(`SELECT count(*) FROM products WHERE document @@ to_tsquery('${text}')`, []);
             client.release();
-            const products = result.rows.map(p => {
+            const products = resultSearch.rows.map(p => {
                 const product = new Product(p.name, p.description, p.photos, p.price, p.discount, p.category, p.id);
                 return product;
             });
-            promise = Promise.resolve(products);
+            promise = Promise.resolve(new ProductSearchResponse(products, resultTotal.rows[0]));
         } catch (err) {
             promise = Promise.reject(`Problem executing the query ${err}`);
         }
