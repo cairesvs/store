@@ -31,7 +31,8 @@ For the language I used Typescript with [express](https://github.com/expressjs/e
 
 #### TODO
 
- - [ ] Make jest work perfectly
+ - [x] Make jest work perfectly
+ - [ ] CircleCI 
 
 ## Installation
 
