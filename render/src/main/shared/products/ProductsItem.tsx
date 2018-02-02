@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Product } from '../../products/model';
 
-export class ProductsItem extends React.Component<{ product: Product }, {}> {
+export class ProductsItem extends React.Component<{ product: Product }, any> {
     render() {
         const product = this.props.product;
         const hasDiscount = product.discount > 0;

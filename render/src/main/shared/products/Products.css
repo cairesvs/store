@@ -25,6 +25,7 @@
   color: #828282;
 }
 
+
 .header {
   color: #666666;
   padding: 3px;
@@ -55,12 +56,6 @@
 }
 .sort-selected {
   font-weight: bold;
-}
-.logo {
-  margin-top: 2px;
-  margin-right: 10px;
-  border: 1px white solid;
-  vertical-align: bottom;
 }
 
 .products-item {
@@ -96,6 +91,14 @@
     padding: 20px;
     display: flex;
     border-bottom: 1px solid lightgray;
+  }
+
+  
+  .default-header .logo {
+    margin: 0;
+    background-image: url(/media/logo.svg);
+    width: 100%;
+    background-repeat: no-repeat;
   }
 
   .search-container {

@@ -1,0 +1,130 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Header/> 1`] = `
+<header
+  className="default-header"
+>
+  <div
+    className="logo"
+  />
+  <div
+    className="search-container"
+  >
+    <form
+      onSubmit={[Function]}
+    >
+      <input
+        className="search"
+        onChange={[Function]}
+        placeholder="Buscar produtos..."
+        type="search"
+      />
+    </form>
+  </div>
+</header>
+`;
+
+exports[`<Page/> 1`] = `
+<div
+  className="products-page"
+>
+  <div
+    className="products-page-size"
+  >
+    <select
+      onChange={[Function]}
+    >
+      <option
+        value="16"
+      >
+        16 produtos por página
+      </option>
+      <option
+        value="30"
+      >
+        30 produtos por página
+      </option>
+      <option
+        value="50"
+      >
+        50 produtos por página
+      </option>
+    </select>
+  </div>
+  <div
+    className="products-page-number"
+  />
+</div>
+`;
+
+exports[`<ProductsItem/> 1`] = `
+<div
+  className="products-info"
+>
+  <div
+    className="products-info-images"
+  />
+  <div
+    className="products-info-detail"
+  >
+    <p>
+      Sofá
+    </p>
+    <p>
+      Lindo sofá
+    </p>
+  </div>
+  <div
+    className="products-info-price"
+  >
+    <span>
+      R$
+      1000
+    </span>
+  </div>
+</div>
+`;
+
+exports[`<ProductsList/> 1`] = `
+<div
+  className="productslist"
+>
+  <div
+    className="header"
+  >
+    <div
+      className="header-title"
+    >
+      <strong>
+        1
+         produtos encontrados
+      </strong>
+    </div>
+  </div>
+  <div
+    className="products-info"
+  >
+    <div
+      className="products-info-images"
+    />
+    <div
+      className="products-info-detail"
+    >
+      <p>
+        Sofá
+      </p>
+      <p>
+        Lindo sofá
+      </p>
+    </div>
+    <div
+      className="products-info-price"
+    >
+      <span>
+        R$
+        1000
+      </span>
+    </div>
+  </div>
+</div>
+`;

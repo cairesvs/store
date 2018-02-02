@@ -16,7 +16,7 @@ export class Header extends React.Component<HeaderProps, {}> {
     render() {
         return (
             <header className='default-header'>
-                <img src={logo} />
+                <div className='logo' />
                 <div className='search-container'>
                     <form onSubmit={this.props.submitFn}>
                         <input type='search' className='search' placeholder='Buscar produtos...' onChange={this.props.changeTermFn} />
