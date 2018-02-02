@@ -21,8 +21,8 @@ For the language I used Typescript with [express](https://github.com/expressjs/e
 
 #### TODO
 
- -[ ] Monitoring(Prometheus, Newrelic, ect...)
- -[ ] Transaction ID to trace requests via log
+ - [ ] Monitoring(Prometheus, Newrelic, ect...)
+ - [ ] Transaction ID to trace requests via log
 
 ### Render
 
@@ -31,14 +31,16 @@ For the language I used Typescript with [express](https://github.com/expressjs/e
 
 #### TODO
 
- -[ ] Make jest work perfectly
+ - [ ] Make jest work perfectly
 
 ## Installation
 
 [API](api/README.md#installation)
+
 [Render](render/README.md#installation)
 
 ## How to run
 
 [API](api/README.md#how-to-run)
+
 [Render](render/README.md#how-to-run)
