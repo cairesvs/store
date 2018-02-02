@@ -46,7 +46,7 @@ router.get('/', (req: express.Request, res: express.Response) => {
         results: data,
         pageSize: pageSize,
         page: page,
-        term: ''
+        term: term
       });
       res.send(markup);
     })
