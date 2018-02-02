@@ -7,6 +7,7 @@ export class Database {
     static create(): void {
         const options = {
             user: config.get<string>('Postgres.user'),
+            password: config.get<string>('Postgres.password'),
             host: config.get<string>('Postgres.host'),
             database: config.get<string>('Postgres.db'),
             port: config.get<number>('Postgres.port')
